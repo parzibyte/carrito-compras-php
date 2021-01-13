@@ -54,7 +54,7 @@ if (count($productos) <= 0) {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2" class="is-size-4"><strong>Total</strong></td>
+                        <td colspan="2" class="is-size-4 has-text-right"><strong>Total</strong></td>
                         <td colspan="2" class="is-size-4">
                             $<?php echo number_format($total, 2) ?>
                         </td>
