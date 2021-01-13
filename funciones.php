@@ -1,10 +1,69 @@
 <?php
 
-function guardarProducto($nombre, $precio)
+function quitarProductoDelCarrito($idProducto)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("INSERT INTO productos(nombre, precio) VALUES(?, ?)");
-    return $sentencia->execute([$nombre, $precio]);
+    iniciarSesionSiNoEstaIniciada();
+    $idSesion = session_id();
+    $sentencia = $bd->prepare("DELETE FROM carrito_usuarios WHERE id_sesion = ? AND id_producto = ?");
+    return $sentencia->execute([$idSesion, $idProducto]);
+}
+
+function obtenerProductos()
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT id, nombre, descripcion, precio FROM productos");
+    return $sentencia->fetchAll();
+}
+function productoYaEstaEnCarrito($idProducto)
+{
+    $ids = obtenerIdsDeProductosEnCarrito();
+    foreach ($ids as $id) {
+        if ($id == $idProducto) return true;
+    }
+    return false;
+}
+
+function obtenerIdsDeProductosEnCarrito()
+{
+    $bd = obtenerConexion();
+    iniciarSesionSiNoEstaIniciada();
+    $sentencia = $bd->prepare("SELECT id_producto FROM carrito_usuarios WHERE id_sesion = ?");
+    $idSesion = session_id();
+    $sentencia->execute([$idSesion]);
+    return $sentencia->fetchAll(PDO::FETCH_COLUMN);
+}
+
+function agregarProductoAlCarrito($idProducto)
+{
+    // Ligar el id del producto con el usuario a través de la sesión
+    $bd = obtenerConexion();
+    iniciarSesionSiNoEstaIniciada();
+    $idSesion = session_id();
+    $sentencia = $bd->prepare("INSERT INTO carrito_usuarios(id_sesion, id_producto) VALUES (?, ?)");
+    return $sentencia->execute([$idSesion, $idProducto]);
+}
+
+
+function iniciarSesionSiNoEstaIniciada()
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+}
+
+function eliminarProducto($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("DELETE FROM productos WHERE id = ?");
+    return $sentencia->execute([$id]);
+}
+
+function guardarProducto($nombre, $precio, $descripcion)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("INSERT INTO productos(nombre, precio, descripcion) VALUES(?, ?, ?)");
+    return $sentencia->execute([$nombre, $precio, $descripcion]);
 }
 
 function obtenerVariableDelEntorno($key)

@@ -1,8 +1,7 @@
 <?php include_once "encabezado.php" ?>
-<?php include_once "funciones.php";
-$bd = obtenerConexion();
-$sentencia = $bd->query("SELECT id, nombre, precio FROM productos");
-$productos = $sentencia->fetchAll();
+<?php
+include_once "funciones.php";
+$productos = obtenerProductos();
 ?>
 <div class="columns">
     <div class="column">
@@ -12,20 +11,22 @@ $productos = $sentencia->fetchAll();
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Descripción</th>
                     <th>Precio</th>
-                    <th>Agregar al carrito</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($productos as $producto) { ?>
                     <tr>
                         <td><?php echo $producto->nombre ?></td>
+                        <td><?php echo $producto->descripcion ?></td>
                         <td>$<?php echo number_format($producto->precio, 2) ?></td>
                         <td>
-                            <form action="agregar_al_carrito.php" method="post">
+                            <form action="eliminar_producto.php" method="post">
                                 <input type="hidden" name="id_producto" value="<?php echo $producto->id ?>">
-                                <button class="button is-primary">
-                                    <i class="fa fa-cart-plus"></i>
+                                <button class="button is-danger">
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                             </form>
                         </td>
