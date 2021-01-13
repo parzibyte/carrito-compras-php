@@ -25,12 +25,19 @@
         <div class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item" href="productos.php">Productos</a>
+                <a class="navbar-item" href="tienda.php">Tienda</a>
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a target="_blank" rel="noreferrer" href="ver_carrito.php" class="button is-success">
-                            <strong>Ver carrito&nbsp;<i class="fa fa-shopping-cart"></i></strong>
+                        <a  href="ver_carrito.php" class="button is-success">
+                            <strong>Ver carrito <?php
+                                                include_once "funciones.php";
+                                                $conteo = count(obtenerIdsDeProductosEnCarrito());
+                                                if ($conteo > 0) {
+                                                    printf("(%d)", $conteo);
+                                                }
+                                                ?>&nbsp;<i class="fa fa-shopping-cart"></i></strong>
                         </a>
                     </div>
                 </div>
