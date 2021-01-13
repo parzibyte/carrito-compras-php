@@ -22,8 +22,8 @@ $productos = obtenerProductos();
                     <div class="content">
                         <?php echo $producto->descripcion ?>
                     </div>
+                    <h1 class="is-size-3">$<?php echo number_format($producto->precio, 2) ?></h1>
                     <?php if (productoYaEstaEnCarrito($producto->id)) { ?>
-                        <h1 class="is-size-3">$<?php echo number_format($producto->precio, 2) ?></h1>
                         <form action="eliminar_del_carrito.php" method="post">
                             <input type="hidden" name="id_producto" value="<?php echo $producto->id ?>">
                             <span class="button is-success">
